@@ -16,7 +16,6 @@ function App() {
     }
   
     setResult(an)
-    console.log(an)
   }
 
   return (

@@ -3,6 +3,8 @@
 
 name: PFwChO Zad1 FibCalc GitHub Action Workflow
 on:
+  # Możliwość uruchamiania ręcznego workflow
+  workflow_dispatch:
   push:
     branches: [ main ]
 
