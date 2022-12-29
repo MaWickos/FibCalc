@@ -46,12 +46,54 @@ Polecenie wykorzystane do zbudowania obrazu lokalnie: \
 Uruchomienie kontenera zbudowanego w oparciu o utworzony obraz: \
 `docker run -it --rm -p 3000:3000 fibcalc:test`
 
-Działająca aplikacja:
-
-
 # Punkt (3)
+Aby wykorzystać repozytorium `ghcr.io` należało zalogować się do GitHub Packages wykorzystując nazwę użytkownika GitHub i token.
+```
+- name: Login to GitHub Packages
+uses: docker/login-action@v2
+with:
+  registry: ghcr.io
+  username: ${{github.repository_owner}}
+  password: ${{secrets.GIT_HUB_TOKEN}}
+```
 
+Wersjonowanie (semver) wymagały wykorzystania `metadata-action`do którego podano obraz utworzony w `ghcr.io`.
+Nastepnie zgodnie z instrukcją i przykładoweym kodem zamieszczonym w opisie powyższego `action` dodano tagi i etykietę do obrazu.
+```
+  - name: Build and push
+    id: docker_build
+    uses: docker/build-push-action@v2
+    with:
+      cache-from: type=registry,src=docker.io/mawickos/fibcalc:obowiazkowe-cache
+      cache-to: type=registry,ref=docker.io/mawickos/fibcalc:obowiazkowe-cache
+      platforms: linux/amd64, linux/arm64
+      context: ./
+      file: ./Dockerfile
+      push: true
+      tags: ${{ steps.meta.outputs.tags }}
+      labels: ${{ steps.meta.outputs.labels }}
+  ```
 
+# Punkt (4)
+Listę dostępnych `workflow` w ramach GitHub Actions można wyświetlić poleceniem \
+`gh workflow list`
+
+Uruchomienie danego `workflow` wykono następującym poleceniem: \
+`gh workflow run 44216443`
+
+Aby wyświetlić aktualnie uruchomione `workflow` użyłem polecenia: \
+`gh run list`
+
+Aby na bieżąco podglądać status wykonywanej operacji za drugim razem wykorzystałem polecenie: \
+`gh run workflow 44216443`
+
+W serwisie DockerHub utworzony został obraz przechowujący `cache` powstały przy budowaniu obrazu.
+
+# Linki
+- Repozytorium DockerHub (docker.io): `docker.io/mawickos/fibcalc:obowiazkowe-cache`
+- Repozytorium GitHub (ghcr.io): `ghcr.io/MaWickos/FibCalc`
+
+<<<<<<< HEAD
 # Punkt (4)
 Listę dostępnych `workflow` w ramach GitHub Actions można wyświetlić poleceniem \
 `gh workflow list`
@@ -70,3 +112,5 @@ Aby na bieżąco podglądać status wykonywanej operacji wystarczy w poniższym 
 - Repozytorium GitHub (ghcr.io): ghcr.io/MaWickos/FibCalc
 
 
+=======
+>>>>>>> dcb7f6333a00e90b4df72de12310ae316b766a5d
