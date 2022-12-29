@@ -43,11 +43,11 @@ Polecenia wykorzystane do tworzenia repozytorium na  GitHubie:
 ![Utworzenie repozytorium](https://github.com/MaWickos/FibCalc/blob/main/images/zad1_1_3.png)
 
 # Punkt (2)
-Polecenie wykorzystane do zbudowania obrazu lokalnie: \
+Polecenie wykorzystane do zbudowania obrazu lokalnie: 
 `docker build -t fibcalc:test .` \
 ![Zbudowanie obrazu](https://github.com/MaWickos/FibCalc/blob/main/images/zad1_2_1.png)
 
-Uruchomienie kontenera zbudowanego w oparciu o utworzony obraz: \
+Uruchomienie kontenera zbudowanego w oparciu o utworzony obraz: 
 `docker run -it --rm -p 3000:3000 fibcalc:test` \
 ![Utworzenie kontenera](https://github.com/MaWickos/FibCalc/blob/main/images/zad1_2_2.png)
 
@@ -62,8 +62,22 @@ with:
   password: ${{secrets.GIT_HUB_TOKEN}}
 ```
 
-Wersjonowanie (semver) wymagały wykorzystania `metadata-action`do którego podano obraz utworzony w `ghcr.io`.
-Nastepnie zgodnie z instrukcją i przykładoweym kodem zamieszczonym w opisie powyższego `action` dodano tagi i etykietę do obrazu.
+Wersjonowanie (semver) wymagały wykorzystania `metadata-action`do którego jako parametr wejściowy podano obraz utworzony w `ghcr.io`. Zdefiniowano również odpowiednio tagi tak aby wykorzystać semantic versioning.
+```
+  - name: Docker meta
+    id: meta
+    uses: docker/metadata-action@v4
+    with:
+      images: |
+        ghcr.io/MaWickos/FibCalc
+      tags: |
+        type=ref,event=branch
+        type=ref,event=pr
+        type=semver,pattern={{version}}
+        type=semver,pattern={{major}}.{{minor}}
+```
+
+Nastepnie zgodnie z instrukcją i przykładowym kodem zamieszczonym w opisie powyższego `action` dodano tagi i etykietę do obrazu.
 ```
   - name: Build and push
     id: docker_build
